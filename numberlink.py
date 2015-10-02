@@ -26,10 +26,12 @@ class NumberLink(Problem):
             for line in f:
                     y=y+1
                     x=-1
+                    mapL2=[]
                     for col in line:
                         x=x+1
-                        if(col!='.' and col!= '\n'):
-                                mapL.append((x,y,col))
+                        if(col!= '\n'):
+                                mapL2.append(col)
+                    mapL.append(mapL2)
             print(mapL)
             self.initial=('init',tuple(mapL))
 
@@ -67,6 +69,7 @@ def inBounds(grid, pos):
 
 
 problem=NumberLink(sys.argv[1])
+
 #example of bfs search
 #node=depth_first_graph_search(problem)
 #example of print
