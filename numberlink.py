@@ -20,15 +20,11 @@ class NumberLink(Problem):
 	    pass
 
     def createMap(self,path):
-            y=-1
             mapL=[]
             f=open(path,'r')
             for line in f:
-                    y=y+1
-                    x=-1
                     mapL2=[]
                     for col in line:
-                        x=x+1
                         if(col!= '\n'):
                                 mapL2.append(col)
                     mapL.append(mapL2)
