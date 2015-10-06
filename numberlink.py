@@ -14,23 +14,34 @@ class NumberLink(Problem):
             pass
 	
     def goal_test(self, state):
-	    pass
+            if '.' in state:
+                return False
+            else:
+                return True
+            pass
     
     def successor(self, state):
 	    pass
 
     def createMap(self,path):
             mapL=[]
+            mapLetter=[]
             f=open(path,'r')
+            y=0
             for line in f:
                     mapL2=[]
+                    x=0
                     for col in line:
                         if(col!= '\n'):
                                 mapL2.append(col)
+                        if(col!='.' and col!='\n'):
+                            mapLetter.append((col,x,y))
+                        x=x+1
                     mapL.append(mapL2)
+                    y=y+1
             print(mapL)
-            self.initial=(tuple(mapL))
-            print(self.initial)
+            print(mapLetter)
+            self.initial=(tuple(mapL),tuple(mapLetter))
 
 
 ###################### 
