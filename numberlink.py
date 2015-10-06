@@ -40,6 +40,7 @@ class NumberLink(Problem):
                 successors = []
                 currentLetter = self.letter[0]
                 grid = tupleToList(state[1])
+                print(grid)
                 currentPoint = state[0]
                 for elem in self.end:
                         if elem[0] == currentLetter:
@@ -52,9 +53,9 @@ class NumberLink(Problem):
                         nextcol = currentPoint[1]+diir[1]
                         if(pathExists(grid,[nextline,nextcol],endPoint)):
                                 grid[nextline][nextcol] = currentLetter
+                                print(grid)
                                 successors.extend( ( (nextline,nextcol),listToTuple(grid) ) )
                                 grid[nextline][nextcol] = '.'
-                #print(successors)
                 return tuple(successors) 
 
         def createMap(self,path):
@@ -119,18 +120,18 @@ def pathExists(grid, start, end):
 	return ok
 
 def pathExistsDFS(grid, start, end, visited):
-	for d in directions:
-		i = start[0] + d[0]
-		j = start[1] + d[1]
-		next = [i, j]
-	if i == end[0] and j == end[1]:
-		return True
-	if inBounds(grid, next) and grid[i][j] == '.' and not visited[i][j]:
-		visited[i][j] = 1
-		exists = pathExistsDFS(grid, next, end, visited)
-		if exists:
-			return True
-		return False
+        for d in directions:
+                i = start[0] + d[0]
+                j = start[1] + d[1]
+                next = [i, j]
+                if i == end[0] and j == end[1]:
+                        return True
+                if inBounds(grid, next) and grid[i][j] == '.' and not visited[i][j]:
+                        visited[i][j] = 1
+                        exists = pathExistsDFS(grid, next, end, visited)
+                        if exists:
+                                return True
+        return False
 
 def inBounds(grid, pos):
 	return 0 <= pos[0] and pos[0] < len(grid) and 0 <= pos[1] and pos[1] < len(grid[0])

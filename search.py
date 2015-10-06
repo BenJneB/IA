@@ -84,7 +84,7 @@ class Node:
 	
 	def expand(self, problem):
 		"Yield the nodes reachable from this node. [Fig. 3.8]"
-		print(len(problem.successor(self.state)))
+		print((problem.successor(self.state)))
 		for (act,next) in problem.successor(self.state):
 			yield Node(next, self, act, problem.path_cost(self.path_cost, self.state, act, next))
 
