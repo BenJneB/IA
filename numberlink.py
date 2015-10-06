@@ -14,11 +14,11 @@ class NumberLink(Problem):
             pass
 	
     def goal_test(self, state):
-            if '.' in state:
-                return False
-            else:
-                return True
-            pass
+            for e in state[0]:
+                if '.' in e:
+                    return False
+                else:
+                    return True
     
     def successor(self, state):
 	    pass
@@ -37,7 +37,7 @@ class NumberLink(Problem):
                         if(col!='.' and col!='\n'):
                             mapLetter.append((col,x,y))
                         x=x+1
-                    mapL.append(mapL2)
+                    mapL.append(tuple(mapL2))
                     y=y+1
             print(mapL)
             print(mapLetter)
