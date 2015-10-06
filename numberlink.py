@@ -32,25 +32,28 @@ class NumberLink(Problem):
 		letter=[]
 		startLetter=[]
 		f=open(path,'r')
-		y=0
+		ligne=0
 		for line in f:
 			mapL2=[]
-			x=0
+			colonne=0
 			for col in line:
 				if(col!= '\n'):
 					mapL2.append(col)
 				if(col!='.' and col!='\n'):
                                         if col in letter:
-                                                endLetter.append((col,x,y))
+                                                endLetter.append((col,ligne,colonne))
                                         else:
                                                 letter.append(col)
-                                                startLetter.append((col,x,y))
-				x=x+1
+                                                startLetter.append((col,ligne,colonne))
+				colonne=colonne+1
 			mapL.append(tuple(mapL2))
-			y=y+1
+			ligne=ligne+1
 		self.initial=([0,0],tuple(mapL))
 		self.end=tuple(endLetter)
 		self.letter=letter
+		self.start=tuple(startLetter)
+		print(startLetter)
+		print(endLetter)
                                 
 
 ###################### 
