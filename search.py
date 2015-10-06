@@ -51,42 +51,42 @@ class Problem:
 #______________________________________________________________________________
     
 class Node:
-    """A node in a search tree. Contains a pointer to the parent (the node
-    that this is a successor of) and to the actual state for this node. Note
-    that if a state is arrived at by two paths, then there are two nodes with
-    the same state.  Also includes the action that got us to this state, and
-    the total path_cost (also known as g) to reach the node.  Other functions
-    may add an f and h value; see best_first_graph_search and astar_search for
-    an explanation of how the f and h values are handled. You will not need to
-    subclass this class."""
+	"""A node in a search tree. Contains a pointer to the parent (the node
+	that this is a successor of) and to the actual state for this node. Note
+	that if a state is arrived at by two paths, then there are two nodes with
+	the same state.  Also includes the action that got us to this state, and
+	the total path_cost (also known as g) to reach the node.  Other functions
+	may add an f and h value; see best_first_graph_search and astar_search for
+	an explanation of how the f and h values are handled. You will not need to
+	subclass this class."""
 
-    def __init__(self, state, parent=None, action=None, path_cost=0):
-        "Create a search tree Node, derived from a parent by an action."
-        self.state=state
-        self.parent = parent
-        self.action=action
-        self.path_cost=path_cost
-        if parent:
-            self.depth = parent.depth + 1
-        else:
-            self.depth = 0
+	def __init__(self, state, parent=None, action=None, path_cost=0):
+		"Create a search tree Node, derived from a parent by an action."
+		self.state=state
+		self.parent = parent
+		self.action=action
+		self.path_cost=path_cost
+		if parent:
+			self.depth = parent.depth + 1
+		else:
+			self.depth = 0
             
-    def __repr__(self):
-        return "<Node %s>" % (self.state,)
+	def __repr__(self):
+		return "<Node %s>" % (self.state,)
     
-    def path(self):
-        "Create a list of nodes from the root to this node."
-        x, result = self, [self]
-        while x.parent:
-            result.append(x.parent)
-            x = x.parent
-        return result
-
-    def expand(self, problem):
-        "Yield the nodes reachable from this node. [Fig. 3.8]"
-        for (act,next) in problem.successor(self.state):
-            yield Node(next, self, act,
-                problem.path_cost(self.path_cost, self.state, act, next))
+	def path(self):
+		"Create a list of nodes from the root to this node."
+		x, result = self, [self]
+		while x.parent:
+			result.append(x.parent)
+			x = x.parent
+		return result
+	
+	def expand(self, problem):
+		"Yield the nodes reachable from this node. [Fig. 3.8]"
+		print(len(problem.successor(self.state)))
+		for (act,next) in problem.successor(self.state):
+			yield Node(next, self, act, problem.path_cost(self.path_cost, self.state, act, next))
 
 
 #______________________________________________________________________________

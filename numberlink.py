@@ -10,10 +10,11 @@ from search import *
 
 class NumberLink(Problem):
 	def __init__(self, init):
-                self.letter=[]
-                self.end=[]
-                self.start=[]
-                self.createMap(init)
+		self.letter=[]
+		self.end=[]
+		self.start=[]
+		self.createMap(init)
+		pass
 	
 	def goal_test(self, state):
 		i=0
@@ -34,15 +35,14 @@ class NumberLink(Problem):
 			self.letter.remove(currentLetter)
 			return None
 		for diir in directions:
-			nextline = startpoint[0]+diir[0]
-			nextcol = startpoint[1]+diir[1]
-			if(pathExist(grid,[nextline,nextcol],endPoint)):
+			nextline = currentPoint[0]+diir[0]
+			nextcol = currentPoint[1]+diir[1]
+			if(pathExists(grid,[nextline,nextcol],endPoint)):
 				grid[nextline][nextcol] = currentLetter
-				successors.extend(([nextline,nextcol],grid))
+				successors.extend( ( (nextline,nextcol),listToTuple(grid) ) )
 				grid[nextline][nextcol] = '.'
+		#print(successors)
 		return tuple(successors) 
-			
-		#if rejoint remove one letter
 
 	def createMap(self,path):
 		mapL=[]
@@ -71,9 +71,9 @@ class NumberLink(Problem):
 		self.start=startLetter
 		line = startLetter[0][1]
 		col = startLetter[0][2]
-		self.initial=([line,col],tuple(mapL))
-		print(startLetter)
-		print(endLetter)
+		self.initial=((line,col),tuple(mapL))
+		#print(startLetter)
+		#print(endLetter)
                                 
 
 ###################### 
@@ -88,7 +88,7 @@ def tupleToList(yuple):
 		llist.append(list(line))
 	return llist
 
-def ListToTuple(List):
+def listToTuple(List):
 	Tuple = []
 	for line in List:
 		Tuple.append(tuple(line))
@@ -96,7 +96,7 @@ def ListToTuple(List):
 
 def checkEnd(currentPoint,endPoint):
 	for diir in directions:
-		if ((startpoint[0]+diir[0] == endPoint[0]) and (startpoint[1]+diir[1] == endPoint[1])):
+		if ((currentPoint[0]+diir[0] == endPoint[0]) and (currentPoint[1]+diir[1] == endPoint[1])):
 			return True
 	return False		
 
@@ -130,7 +130,7 @@ def inBounds(grid, pos):
 problem=NumberLink(sys.argv[1])
 
 #example of bfs search
-#node=depth_first_graph_search(problem)
+node=depth_first_graph_search(problem)
 #example of print
 #path=node.path()
 #path.reverse()
