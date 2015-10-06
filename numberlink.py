@@ -11,13 +11,14 @@ from search import *
 
 class NumberLink(Problem):
 	def __init__(self, init):
-		self.createMap(init)
-		print(self.goal_test(self.initial))
-		pass
+                self.letter=[]
+                self.end=[]
+                self.start=[]
+                self.createMap(init)
 	
 	def goal_test(self, state):
 		i=0
-		for e in state[0]:
+		for e in state[1]:
 			if '.' in e:
 				return False
 		return True
@@ -27,7 +28,9 @@ class NumberLink(Problem):
 
 	def createMap(self,path):
 		mapL=[]
-		mapLetter=[]
+		endLetter=[]
+		letter=[]
+		startLetter=[]
 		f=open(path,'r')
 		y=0
 		for line in f:
@@ -37,14 +40,18 @@ class NumberLink(Problem):
 				if(col!= '\n'):
 					mapL2.append(col)
 				if(col!='.' and col!='\n'):
-					mapLetter.append((col,x,y))
+                                        if col in letter:
+                                                endLetter.append((col,x,y))
+                                        else:
+                                                letter.append(col)
+                                                startLetter.append((col,x,y))
 				x=x+1
 			mapL.append(tuple(mapL2))
 			y=y+1
-		print(mapL)
-		print(mapLetter)
-		self.initial=(tuple(mapL),tuple(mapLetter))
-
+		self.initial=([0,0],tuple(mapL))
+		self.end=tuple(endLetter)
+		self.letter=letter
+                                
 
 ###################### 
 # Auxiliary function #
@@ -52,43 +59,17 @@ class NumberLink(Problem):
 
 directions = [ [-1, 0], [1, 0], [0, -1], [0, 1] ]
 
-def TupleToList(Tuple)
-	List = []
-	for line in Tuple:
-		List.append(list(line))
-	return List
+def tupleToList(yuple):
+	llist = []
+	for line in yuple:
+		llist.append(list(line))
+	return llist
 
-def ListToTuple(List)
+def ListToTuple(List):
 	Tuple = []
 	for line in List:
 		Tuple.append(tuple(line))
-	return tuple(Tuple)
-
-def IA(state)
-	grid = TupleToList(state[0])
-	letter = TupleToList(state[1])
-	startPoints = searchLetter(letter,'A')
-	start = endPoints[0]
-	end = endpoints[1]
-	nextState = []
-	if(not pathExists(grid,start,end)):
-		return nextState
-	for choice in directions:
-		grid[start[0]+choice[0]][start[1]+choice[1]]
-		letter
-	
-	
-
-def searchLetter(tab,letter)
-	startPoints = []
-	endPoints = []
-	dico = {}
-	for Tuple in tab:
-		if Tuple[0] == letter:
-			if letter not in dico
-				startPoints.append(Tuple[1])
-				.append(Tuple[2])
-	return (tuple(startPoints),tuple(endPoints))
+	return tuple(Tuple)	
 		
 
 def pathExists(grid, start, end):
@@ -97,18 +78,18 @@ def pathExists(grid, start, end):
 	return ok
 
 def pathExistsDFS(grid, start, end, visited):
-	for d in directions:
-		i = start[0] + d[0]
-		j = start[1] + d[1]
-		next = [i, j]
+        for d in directions:
+                i = start[0] + d[0]
+                j = start[1] + d[1]
+                next = [i, j]
         if i == end[0] and j == end[1]:
-		return True
+                return True
         if inBounds(grid, next) and grid[i][j] == '.' and not visited[i][j]:
-		visited[i][j] = 1
-		exists = pathExistsDFS(grid, next, end, visited)
-		if exists:
-			return True
-		return False
+                visited[i][j] = 1
+                exists = pathExistsDFS(grid, next, end, visited)
+                if exists:
+                        return True
+                return False
 
 def inBounds(grid, pos):
 	return 0 <= pos[0] and pos[0] < len(grid) and 0 <= pos[1] and pos[1] < len(grid[0])
