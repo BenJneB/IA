@@ -14,6 +14,7 @@ class NumberLink(Problem):
                 self.letter=[]
                 self.end=[]
                 self.start=[]
+                self.parent=[]
                 self.createMap(init)
                 self.n=len(self.letter)
                 pass
@@ -66,6 +67,7 @@ class NumberLink(Problem):
                                 successors.append( ( (nextline,nextcol),listToTuple(grid) ) )
                                 print(successors)
                                 grid[nextline][nextcol] = '.'
+                                #self.parent=listToTuple(grid)
                 return tuple(successors) 
 
         def createMap(self,path):
