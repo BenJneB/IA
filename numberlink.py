@@ -1,5 +1,5 @@
 '''NAMES OF THE AUTHOR(S): TODO'''
-"YOLLLLLLLOOOOOOOOOOO"
+"YO"
 import time
 import sys
 from os import listdir,system
