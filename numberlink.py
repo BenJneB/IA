@@ -73,7 +73,23 @@ def ListToTuple(List):
 	for line in List:
 		Tuple.append(tuple(line))
 	return tuple(Tuple)	
-		
+
+def checkStart(parent,child):
+	li=0
+	col=0
+	for line in parent:
+		for elem in line:
+			if parent[li][col] != child[li][col]:
+				return (li,col)
+			col=col+1
+		li=li+1
+	return 'same'
+
+def checkEnd(currentPoint,endPoint,letter):
+	for diir in directions:
+		if ((startpoint[0]+diir[0] == endPoint[0]) and (startpoint[1]+diir[1] == endPoint[1])):
+			return True
+	return False		
 
 def pathExists(grid, start, end):
 	visited = [ [0 for j in range(0, len(grid[0]))] for i in range(0, len(grid)) ]
