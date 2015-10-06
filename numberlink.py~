@@ -1,10 +1,4 @@
 '''NAMES OF THE AUTHOR(S): TODO'''
-"YO"
-<<<<<<< HEAD
-"YO1"
-=======
-"Yolo"
->>>>>>> origin/master
 import time
 import sys
 from os import listdir,system
@@ -29,7 +23,16 @@ class NumberLink(Problem):
 		return True
     
 	def successor(self, state):
-		pass
+		currentLetter = self.letter[0]
+		grid = tupleToList(state[1])
+		currentPoint = state[0]
+		for elem in self.end:
+			if elem[0] == currentLetter
+				endPoint = [elem[1],elem[2]] 
+		if(checkEnd(currentPoint,endPoint))
+			self.letter.remove(currentLetter)
+			return 
+		#if rejoint remove one letter
 
 	def createMap(self,path):
 		mapL=[]
@@ -53,10 +56,12 @@ class NumberLink(Problem):
 				colonne=colonne+1
 			mapL.append(tuple(mapL2))
 			ligne=ligne+1
-		self.initial=([0,0],tuple(mapL))
-		self.end=tuple(endLetter)
+		self.end=endLetter
 		self.letter=letter
-		self.start=tuple(startLetter)
+		self.start=startLetter
+		line = startLetter[0][1]
+		col = startLetter[0][2]
+		self.initial=([line,col],tuple(mapL))
 		print(startLetter)
 		print(endLetter)
                                 
@@ -79,18 +84,7 @@ def ListToTuple(List):
 		Tuple.append(tuple(line))
 	return tuple(Tuple)	
 
-def checkStart(parent,child):
-	li=0
-	col=0
-	for line in parent:
-		for elem in line:
-			if parent[li][col] != child[li][col]:
-				return (li,col)
-			col=col+1
-		li=li+1
-	return 'same'
-
-def checkEnd(currentPoint,endPoint,letter):
+def checkEnd(currentPoint,endPoint):
 	for diir in directions:
 		if ((startpoint[0]+diir[0] == endPoint[0]) and (startpoint[1]+diir[1] == endPoint[1])):
 			return True
@@ -102,18 +96,18 @@ def pathExists(grid, start, end):
 	return ok
 
 def pathExistsDFS(grid, start, end, visited):
-        for d in directions:
-                i = start[0] + d[0]
-                j = start[1] + d[1]
-                next = [i, j]
-        if i == end[0] and j == end[1]:
-                return True
-        if inBounds(grid, next) and grid[i][j] == '.' and not visited[i][j]:
-                visited[i][j] = 1
-                exists = pathExistsDFS(grid, next, end, visited)
-                if exists:
-                        return True
-                return False
+	for d in directions:
+		i = start[0] + d[0]
+		j = start[1] + d[1]
+		next = [i, j]
+	if i == end[0] and j == end[1]:
+		return True
+	if inBounds(grid, next) and grid[i][j] == '.' and not visited[i][j]:
+		visited[i][j] = 1
+		exists = pathExistsDFS(grid, next, end, visited)
+		if exists:
+			return True
+		return False
 
 def inBounds(grid, pos):
 	return 0 <= pos[0] and pos[0] < len(grid) and 0 <= pos[1] and pos[1] < len(grid[0])
