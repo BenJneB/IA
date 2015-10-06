@@ -9,69 +9,82 @@ from search import *
 #################
 
 class NumberLink(Problem):
-	def __init__(self, init):
-		self.letter=[]
-		self.end=[]
-		self.start=[]
-		self.createMap(init)
-		pass
+        def __init__(self, init):
+                self.letter=[]
+                self.end=[]
+                self.start=[]
+                self.createMap(init)
+                self.n=len(self.letter)
+                pass
 	
-	def goal_test(self, state):
-		i=0
-		for e in state[1]:
-			if '.' in e:
-				return False
-		return True
+        def goal_test(self, state):
+                n=self.n
+                i=0
+                maap=state[1]
+                for e in maap:
+                        if '.' in e:
+                                return False
+                for (letter,ligne,col) in self.end:
+                        for diir in directions:
+                                newL=ligne+diir[1]
+                                newC=col+diir[0]
+                                if (maap[newL][newC]==letter):
+                                        i=i+1
+                                        break
+                if(i==n):                        
+                        return True
+                else:
+                        return False
     
-	def successor(self, state):
-		successors = []
-		currentLetter = self.letter[0]
-		grid = tupleToList(state[1])
-		currentPoint = state[0]
-		for elem in self.end:
-			if elem[0] == currentLetter:
-				endPoint = [elem[1],elem[2]] 
-		if(checkEnd(currentPoint,endPoint)):
-			self.letter.remove(currentLetter)
-			return None
-		for diir in directions:
-			nextline = currentPoint[0]+diir[0]
-			nextcol = currentPoint[1]+diir[1]
-			if(pathExists(grid,[nextline,nextcol],endPoint)):
-				grid[nextline][nextcol] = currentLetter
-				successors.extend( ( (nextline,nextcol),listToTuple(grid) ) )
-				grid[nextline][nextcol] = '.'
-		#print(successors)
-		return tuple(successors) 
+        def successor(self, state):
+                successors = []
+                currentLetter = self.letter[0]
+                grid = tupleToList(state[1])
+                currentPoint = state[0]
+                for elem in self.end:
+                        if elem[0] == currentLetter:
+                                endPoint = [elem[1],elem[2]] 
+                if(checkEnd(currentPoint,endPoint)):
+                        self.letter.remove(currentLetter)
+                        return None
+                for diir in directions:
+                        nextline = currentPoint[0]+diir[0]
+                        nextcol = currentPoint[1]+diir[1]
+                        if(pathExists(grid,[nextline,nextcol],endPoint)):
+                                grid[nextline][nextcol] = currentLetter
+                                successors.extend( ( (nextline,nextcol),listToTuple(grid) ) )
+                                grid[nextline][nextcol] = '.'
+                #print(successors)
+                return tuple(successors) 
 
-	def createMap(self,path):
-		mapL=[]
-		endLetter=[]
-		letter=[]
-		startLetter=[]
-		f=open(path,'r')
-		ligne=0
-		for line in f:
-			mapL2=[]
-			colonne=0
-			for col in line:
-				if(col!= '\n'):
-					mapL2.append(col)
-				if(col!='.' and col!='\n'):
+        def createMap(self,path):
+                mapL=[]
+                endLetter=[]
+                letter=[]
+                startLetter=[]
+                f=open(path,'r')
+                ligne=0
+                for line in f:
+                        mapL2=[]
+                        colonne=0
+                        for col in line:
+                                if(col!= '\n'):
+                                        mapL2.append(col)
+                                if(col!='.' and col!='\n'):
                                         if col in letter:
                                                 endLetter.append((col,ligne,colonne))
                                         else:
                                                 letter.append(col)
                                                 startLetter.append((col,ligne,colonne))
-				colonne=colonne+1
-			mapL.append(tuple(mapL2))
-			ligne=ligne+1
-		self.end=endLetter
-		self.letter=letter
-		self.start=startLetter
-		line = startLetter[0][1]
-		col = startLetter[0][2]
-		self.initial=((line,col),tuple(mapL))
+                                colonne=colonne+1
+                        mapL.append(tuple(mapL2))
+                        ligne=ligne+1
+                self.end=endLetter
+                self.letter=letter
+                self.start=startLetter
+                line = startLetter[0][1]
+                col = startLetter[0][2]
+                self.initial=((line,col),tuple(mapL))
 		#print(startLetter)
 		#print(endLetter)
                                 
@@ -96,7 +109,7 @@ def listToTuple(List):
 
 def checkEnd(currentPoint,endPoint):
 	for diir in directions:
-		if ((currentPoint[0]+diir[0] == endPoint[0]) and (currentPoint[1]+diir[1] == endPoint[1])):
+		if ((currentPoint[0]+diir[1] == endPoint[0]) and (currentPoint[1]+diir[0] == endPoint[1])):
 			return True
 	return False		
 
