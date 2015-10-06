@@ -49,13 +49,14 @@ class NumberLink(Problem):
                         self.letter.remove(currentLetter)
                         return None
                 for diir in directions:
-                        nextline = currentPoint[0]+diir[0]
-                        nextcol = currentPoint[1]+diir[1]
-                        if(pathExists(grid,[nextline,nextcol],endPoint)):
+                        nextline = currentPoint[0]+diir[1]
+                        nextcol = currentPoint[1]+diir[0]
+                        if(pathExists(grid,[nextline,nextcol],endPoint) and grid[nextline][nextcol]=='.'):
                                 grid[nextline][nextcol] = currentLetter
                                 print(grid)
                                 successors.extend( ( (nextline,nextcol),listToTuple(grid) ) )
                                 grid[nextline][nextcol] = '.'
+                                print(grid)
                 return tuple(successors) 
 
         def createMap(self,path):
