@@ -28,15 +28,15 @@ class NumberLink(Problem):
 		grid = tupleToList(state[1])
 		currentPoint = state[0]
 		for elem in self.end:
-			if elem[0] == currentLetter
+			if elem[0] == currentLetter:
 				endPoint = [elem[1],elem[2]] 
-		if(checkEnd(currentPoint,endPoint))
+		if(checkEnd(currentPoint,endPoint)):
 			self.letter.remove(currentLetter)
 			return None
 		for diir in directions:
 			nextline = startpoint[0]+diir[0]
 			nextcol = startpoint[1]+diir[1]
-			if(pathExist(grid,[nextline,nextcol],endPoint))
+			if(pathExist(grid,[nextline,nextcol],endPoint)):
 				grid[nextline][nextcol] = currentLetter
 				successors.extend(([nextline,nextcol],grid))
 				grid[nextline][nextcol] = '.'
