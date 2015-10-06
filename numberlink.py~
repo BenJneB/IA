@@ -1,7 +1,10 @@
 '''NAMES OF THE AUTHOR(S): TODO'''
-"Yo"
+"YO"
+<<<<<<< HEAD
 "YO1"
+=======
 "Yolo"
+>>>>>>> origin/master
 import time
 import sys
 from os import listdir,system
