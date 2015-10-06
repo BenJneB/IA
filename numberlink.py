@@ -29,7 +29,8 @@ class NumberLink(Problem):
                                 mapL2.append(col)
                     mapL.append(mapL2)
             print(mapL)
-            self.initial=mapL
+            self.initial=(tuple(mapL))
+            print(self.initial)
 
 
 ###################### 
