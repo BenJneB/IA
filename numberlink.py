@@ -11,14 +11,15 @@ from search import *
 class NumberLink(Problem):
     def __init__(self, init):
             self.createMap(init)
+            print(self.goal_test(self.initial))
             pass
 	
     def goal_test(self, state):
+            i=0
             for e in state[0]:
                 if '.' in e:
                     return False
-                else:
-                    return True
+            return True
     
     def successor(self, state):
 	    pass
