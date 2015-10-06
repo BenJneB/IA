@@ -9,6 +9,7 @@ from search import *
 #################
 
 class NumberLink(Problem):
+        initial=0
         def __init__(self, init):
                 self.letter=[]
                 self.end=[]
@@ -20,10 +21,10 @@ class NumberLink(Problem):
         def goal_test(self, state):
                 n=self.n
                 i=0
-                maap=state[1]
-                for e in maap:
-                        if '.' in e:
-                                return False
+                if(initial==0):
+                        maap=state[1]
+                else:
+                        maap=state
                 for (letter,ligne,col) in self.end:
                         for diir in directions:
                                 newL=ligne+diir[1]
@@ -39,12 +40,18 @@ class NumberLink(Problem):
         def successor(self, state):
                 successors = []
                 currentLetter = self.letter[0]
-                grid = tupleToList(state[1])
-                print(grid)
-                currentPoint = state[0]
+                if(initial==0):
+                        grid = tupleToList(state[1])
+                        print('huhuhu')
+                        print(state)
+                        currentPoint = state[0]
+                        initial=initial+1
+                else:
+                        grid=tupleToList(state)
+                        #currentPoint=
                 for elem in self.end:
                         if elem[0] == currentLetter:
-                                endPoint = [elem[1],elem[2]] 
+                                endPoint = (elem[1],elem[2]) 
                 if(checkEnd(currentPoint,endPoint)):
                         self.letter.remove(currentLetter)
                         return None
@@ -53,10 +60,12 @@ class NumberLink(Problem):
                         nextcol = currentPoint[1]+diir[0]
                         if(pathExists(grid,[nextline,nextcol],endPoint) and grid[nextline][nextcol]=='.'):
                                 grid[nextline][nextcol] = currentLetter
+                                print(successors)
+                                print('ahaha')
                                 print(grid)
-                                successors.extend( ( (nextline,nextcol),listToTuple(grid) ) )
+                                successors.append( ( (nextline,nextcol),listToTuple(grid) ) )
+                                print(successors)
                                 grid[nextline][nextcol] = '.'
-                                print(grid)
                 return tuple(successors) 
 
         def createMap(self,path):
