@@ -22,7 +22,6 @@ class NumberLink(Problem):
                 n=self.n
                 i=0
                 maap=state[1]
-                print("goal_test_maap=",maap)
                 for (letter,ligne,col) in self.end:
                         for diir in directions:
                                 newL=ligne+diir[1]
@@ -45,7 +44,7 @@ class NumberLink(Problem):
                         if elem[0] == currentLetter:
                                 endPoint = (elem[1],elem[2]) 
                 if(checkEnd(currentPoint,endPoint)):
-                        self.letter.remove(currentLetter)
+                        #self.letter.remove(currentLetter)
                         return ()
                 for diir in directions:
                         nextline = currentPoint[0]+diir[1]
@@ -54,7 +53,6 @@ class NumberLink(Problem):
                                 grid[nextline][nextcol] = currentLetter
                                 nextState = ((nextline,nextcol),listToTuple(grid))
                                 successors.append( (diir,nextState  ) )
-                                print(successors)
                                 grid[nextline][nextcol] = '.'
                                 #self.parent=listToTuple(grid)
                 return tuple(successors) 
