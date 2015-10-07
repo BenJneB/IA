@@ -1,4 +1,4 @@
-'''NAMES OF THE AUTHOR(S): TODO'''
+'''Benjo Fish'''
 import time
 import sys
 from os import listdir,system
