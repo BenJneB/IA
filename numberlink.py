@@ -37,7 +37,7 @@ class NumberLink(Problem):
 	def successor(self, state):
 		successors = []
 		currentLetter = state[0][0][0]
-		if(possible(state[1],self.start,self.end,list(state[0][0]),currentLetter) and possible2(state[1],state[0][1],self.end,self.start)):
+		if(possible(state[1],self.start,self.end,list(state[0][0]),currentLetter)):
 						grid = tupleToList(state[1])
 						currentStartPoint = state[0][1]
 						for elem in self.end:
@@ -53,7 +53,7 @@ class NumberLink(Problem):
 								nextcol = currentStartPoint[1]+diir[0]
 								if(pathExists(grid,[nextline,nextcol],currentEndPoint) and grid[nextline][nextcol]=='.'):
 										grid[nextline][nextcol] = currentLetter
-										if(possible(grid,self.start,self.end,list(choice[0]),currentLetter) and possible2(grid,(nextline,nextcol),self.end,self.start)):
+										if(possible(grid,self.start,self.end,list(choice[0]),currentLetter) and possible2(grid,(nextline,nextcol),self.end,self.start,list(choice[0]))):
 											nextState = ((choice[0],(nextline,nextcol)),listToTuple(grid))
 											successors.append( (diir,nextState  ) )
 										grid[nextline][nextcol] = '.'
@@ -143,21 +143,25 @@ def numberDot(grid, col):
 				i=i+1
 		return i
 
-def lVr(grid, currentPos,endP,startP):
+def lVr(grid, currentPos,endP,startP,listL):
 		lC=currentPos[0]
 		cC=currentPos[1]
 		i=0
-		for (letterS,lS,cS),(letterE,lE,cE) in zip(startP,endP) :
-			if ((cS<cC and cE>cC) or (cS>cC and cE<cC)):
-				i=i+1
-		return i
+		if(len(listL)>0):
+			listL.remove(listL[0])
+			for (letterS,lS,cS),(letterE,lE,cE) in zip(startP,endP) :
+				if (((cS<cC and cE>cC) or (cS>cC and cE<cC)) and (letterS in listL)):
+					i=i+1
+			return i
+		return 0
 
-def possible2(grid,currentPos,end,start):
+def possible2(grid,currentPos,end,start,listL):
 	nDot=numberDot(grid,currentPos[1])
-	nLVR=lVr(grid,currentPos,end,start)
-	if(nDot<nLVR):
+	nLVR=lVr(grid,currentPos,end,start,listL)
+	if((nDot<nLVR)):
 		return False
-	return True
+	else:
+		return True
 
 def possible(grid,start,end,listL,currentLetter):
 		if(len(listL)!=0):
