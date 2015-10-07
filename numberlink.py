@@ -88,6 +88,7 @@ class NumberLink(Problem):
 		line = startLetter[0][1]
 		col = startLetter[0][2]
 		self.initial=((letter[0],(line,col)),tuple(mapL))
+		f.close
 		#print(startLetter)
 		#print(endLetter)
 				
@@ -121,14 +122,15 @@ def chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,listLetter
 		return (currentLetter,currentStartPoint,currentEndPoint)		 
 	else:
 		for letter in listLetter:
-			for elem in listStartPoint:
-				if elem[0] == letter:
-					startPoint = (elem[1],elem[2])
-			for elem in listEndPoint:
-				if elem[0] == letter:
-					endPoint = (elem[1],elem[2])		
-			if (pathExists(grid, startPoint, endPoint) and not checkEnd(startPoint,endPoint)):
-				return (letter,startPoint,endPoint)
+                        if(letter!=currentLetter):
+                                for elem in listStartPoint:
+                                        if elem[0] == letter:
+                                                startPoint = (elem[1],elem[2])
+                                for elem in listEndPoint:
+                                        if elem[0] == letter:
+                                                endPoint = (elem[1],elem[2])		
+                                if (pathExists(grid, startPoint, endPoint) and not checkEnd(startPoint,endPoint)):
+                                        return (letter,startPoint,endPoint)
 		return None			
 
 
@@ -171,7 +173,13 @@ node=depth_first_graph_search(problem)
 #example of print
 path=node.path()
 path.reverse()
-print(path)
+f=open("solve.txt",'w')
 for n in path:
+
+        for e in n.state[1]:
+                line=''.join(e)
+                f.write(line)
+                f.write('\n')
+        f.write('\n')
         printState(n.state) #assuming that the __str__ function of states output the correct format
 
