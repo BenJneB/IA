@@ -26,10 +26,9 @@ class NumberLink(Problem):
 			for diir in directions:
 				newL=ligne+diir[1]
 				newC=col+diir[0]
-				if(inBounds(maap,[newL,newC])):
-					if (maap[newL][newC]==letter):
-						i=i+1
-						break
+				if((inBounds(maap,[newL,newC])) and (maap[newL][newC]==letter)):
+					i=i+1
+					break
 		if(i==n):                        
 			return True
 		else:
@@ -37,21 +36,25 @@ class NumberLink(Problem):
     
 	def successor(self, state):
 		successors = []
-		currentLetter = self.letter[0]
+		currentLetter = state[0][0]
 		grid = tupleToList(state[1])
-		currentPoint = state[0]
+		currentStartPoint = state[0][1]
 		for elem in self.end:
 			if elem[0] == currentLetter:
-				endPoint = (elem[1],elem[2]) 
-		if(checkEnd(currentPoint,endPoint)):
-			#self.letter.remove(currentLetter) ERREUR sur cette ligne, faut pas qu'elle fasse ça là!!!!
+				currentEndPoint = (elem[1],elem[2]) 		
+		choice = chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,self.letter,self.start,self.end)			
+		if (choice==None):
 			return ()
+		else:
+			currentLetter = choice[0]
+			currentStartPoint = choice[1]
+			currentEndPoint = choice[2]		
 		for diir in directions:
-			nextline = currentPoint[0]+diir[1]
-			nextcol = currentPoint[1]+diir[0]
-			if(pathExists(grid,[nextline,nextcol],endPoint) and grid[nextline][nextcol]=='.'):
+			nextline = currentStartPoint[0]+diir[1]
+			nextcol = currentStartPoint[1]+diir[0]
+			if(pathExists(grid,[nextline,nextcol],currentEndPoint) and grid[nextline][nextcol]=='.'):
 				grid[nextline][nextcol] = currentLetter
-				nextState = ((nextline,nextcol),listToTuple(grid))
+				nextState = ((currentLetter,(nextline,nextcol)),listToTuple(grid))
 				successors.append( (diir,nextState  ) )
 				grid[nextline][nextcol] = '.'
 				#self.parent=listToTuple(grid)
@@ -84,7 +87,7 @@ class NumberLink(Problem):
 		self.start=startLetter
 		line = startLetter[0][1]
 		col = startLetter[0][2]
-		self.initial=((line,col),tuple(mapL))
+		self.initial=((letter[0],(line,col)),tuple(mapL))
 		#print(startLetter)
 		#print(endLetter)
 				
@@ -111,7 +114,23 @@ def checkEnd(currentPoint,endPoint):
 	for diir in directions:
 		if ((currentPoint[0]+diir[1] == endPoint[0]) and (currentPoint[1]+diir[0] == endPoint[1])):
 			return True
-	return False		
+	return False	
+
+def chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,listLetter,listStartPoint,listEndPoint):	
+	if (pathExists(grid, currentStartPoint, currentEndPoint) and not checkEnd(currentStartPoint,currentEndPoint)):
+		return (currentLetter,currentStartPoint,currentEndPoint)		 
+	else:
+		for letter in listLetter:
+			for elem in listStartPoint:
+				if elem[0] == letter:
+					startPoint = (elem[1],elem[2])
+			for elem in listEndPoint:
+				if elem[0] == letter:
+					endPoint = (elem[1],elem[2])		
+			if (pathExists(grid, startPoint, endPoint) and not checkEnd(startPoint,endPoint)):
+				return (letter,startPoint,endPoint)
+		return None			
+
 
 def pathExists(grid, start, end):
 	visited = [ [0 for j in range(0, len(grid[0]))] for i in range(0, len(grid)) ]
