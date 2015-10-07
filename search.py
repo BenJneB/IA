@@ -126,9 +126,7 @@ def graph_search(problem, fringe):
 	If two paths reach a state, only use the best one. [Fig. 3.18]"""
 	closed = {}
 	fringe.append(Node(problem.initial))
-	i=0 #ATTENTIONNNNNNNNNNNN ENLEVER!!!!!!!!!!!!!!!!!!
 	while fringe:
-		print("whil",i)
 		node = fringe.pop()
 		#print('search_pop_state=')
 		#printState(node.state)
@@ -137,8 +135,7 @@ def graph_search(problem, fringe):
 			return node
 		if node.state not in closed:
 			closed[node.state] = True
-			fringe.extend(node.expand(problem))
-		i=i+1 #ATTENTIONNNNNNNNNNNNNNNNNNNNNNNNNNNNN    
+			fringe.extend(node.expand(problem))  
 	return None
 
 def breadth_first_graph_search(problem):

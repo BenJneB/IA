@@ -157,30 +157,31 @@ def possible(grid,start,end,listL,currentLetter,currentPos):
 		return False	
 
 def isCycle(grid,currentLetter,start,end,currentPos):
-	for elem in start:
-		if elem[0] == currentLetter:
-			startP = (elem[1],elem[2])
-			break
-	for elem in end:
-		if elem[0] == currentLetter:
-			endP = (elem[1],elem[2])
-			break
 	curL=currentPos[0]
 	curC=currentPos[1]
-	count=0 
-	if curL+1<len(grid) and grid[curL+1][curC]==currentLetter and ((curL+1,curC)!=startP and (curL+1,curC)!=endP) :
-		count+=1
-	if curL>0 and grid[curL-1][curC]==currentLetter and ((curL-1,curC)!=startP and (curL-1,curC)!=endP) :
-		count+=1      
-	if curC+1<len(grid[curL]) and grid[curL][curC+1]==currentLetter and ((curL,curC+1)!=startP and (curL,curC+1)!=endP): #verifier les len
-		count+=1
-	if curC>0 and grid[curL][curC-1]==currentLetter and ((curL,curC-1)!=startP and (curL,curC-1)!=endP):
-		count+=1
+	if(curL+1<len(grid) and curL-1>=0 and curC-1 >=0 and curC+1<len(grid[0])):
+		for elem in start:
+			if elem[0] == currentLetter:
+				startP = (elem[1],elem[2])
+				break
+		for elem in end:
+			if elem[0] == currentLetter:
+				endP = (elem[1],elem[2])
+				break
+		count=0 
+		if grid[curL+1][curC]==currentLetter and ((curL+1,curC)!=startP and (curL+1,curC)!=endP) :
+			count+=1
+		if grid[curL-1][curC]==currentLetter and ((curL-1,curC)!=startP and (curL-1,curC)!=endP) :
+			count+=1      
+		if grid[curL][curC+1]==currentLetter and ((curL,curC+1)!=startP and (curL,curC+1)!=endP): #verifier les len
+			count+=1
+		if grid[curL][curC-1]==currentLetter and ((curL,curC-1)!=startP and (curL,curC-1)!=endP):
+			count+=1
        
-	if count>=2:	
-		return True
-	else:
-		return False
+		if count>=2:	
+			return True
+		else:
+			return False
 
 def pathExists(grid, start, end):
 	visited = [ [0 for j in range(0, len(grid[0]))] for i in range(0, len(grid)) ]
