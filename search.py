@@ -86,8 +86,8 @@ class Node:
 		"Yield the nodes reachable from this node. [Fig. 3.8]"
 		for (act,next) in problem.successor(self.state):
 			print('currentLetter=',next[0][0][0])
-			print('expand_nextOne=')
-			printState(next)
+			#print('expand_nextOne=')
+			#printState(next)
 			yield Node(next, self, act, problem.path_cost(self.path_cost, self.state, act, next))
 
 

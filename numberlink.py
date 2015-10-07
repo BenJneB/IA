@@ -44,22 +44,21 @@ class NumberLink(Problem):
 								if elem[0] == currentLetter:
 										currentEndPoint = (elem[1],elem[2]) 		
 						choice = chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,state[0][0],self.start,self.end)			
-						if (choice==None):
-								return ()
-						else:
-								currentLetter = choice[0][0]
-								currentStartPoint = choice[1]
-								currentEndPoint = choice[2]		
+						currentLetter = choice[0][0]
+						currentStartPoint = choice[1]
+						currentEndPoint = choice[2]		
 						for diir in directions:
 								nextline = currentStartPoint[0]+diir[1]
 								nextcol = currentStartPoint[1]+diir[0]
 								if(pathExists(grid,[nextline,nextcol],currentEndPoint) and grid[nextline][nextcol]=='.'):
 										grid[nextline][nextcol] = currentLetter
-										nextState = ((choice[0],(nextline,nextcol)),listToTuple(grid))
-										successors.append( (diir,nextState  ) )
+										if(possible(grid,self.start,self.end,list(choice[0]),currentLetter)):
+											nextState = ((choice[0],(nextline,nextcol)),listToTuple(grid))
+											successors.append( (diir,nextState  ) )
 										grid[nextline][nextcol] = '.'
 				#self.parent=listToTuple(grid)
 						return tuple(successors)
+		print("None")				
 		return ()
 
 	def createMap(self,path):
@@ -120,23 +119,21 @@ def checkEnd(currentPoint,endPoint):
 	return False	
 
 def chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,listLetter,listStartPoint,listEndPoint):	
-	if (pathExists(grid, currentStartPoint, currentEndPoint) and not checkEnd(currentStartPoint,currentEndPoint)):
+	if (not checkEnd(currentStartPoint,currentEndPoint)):
 		return (tuple(listLetter),currentStartPoint,currentEndPoint)		 
 	else:
-		if((len(listLetter) != 0)):
-			listLetter = list(listLetter)
-			listLetter.remove(currentLetter)
-			for elem in listStartPoint:
-				if elem[0] == listLetter[0]:
-					startPoint = (elem[1],elem[2])
-			for elem in listEndPoint:
-				if elem[0] == listLetter[0]:
-					endPoint = (elem[1],elem[2])		
-			if (pathExists(grid, startPoint, endPoint)):
-				return (tuple(listLetter),startPoint,endPoint)
-			else:
-				return None	
-		return None			
+		listLetter = list(listLetter)
+		listLetter.remove(currentLetter)
+		for elem in listStartPoint:
+			if elem[0] == listLetter[0]:
+				startPoint = (elem[1],elem[2])
+				break
+		for elem in listEndPoint:
+			if elem[0] == listLetter[0]:
+				endPoint = (elem[1],elem[2])
+				break		
+		return (tuple(listLetter),startPoint,endPoint)	
+			
 
 def possible(grid,start,end,listL,currentLetter):
 		if(len(listL)!=0):
@@ -145,9 +142,11 @@ def possible(grid,start,end,listL,currentLetter):
 				for elem in start:
 					if elem[0] == e:
 						startP = (elem[1],elem[2])
+						break
 				for elem in end:
 					if elem[0] == e:
 						endP = (elem[1],elem[2])
+						break
 				if( not pathExists(grid, startP,endP)):
 					return False
 			return True
