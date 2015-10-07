@@ -37,7 +37,7 @@ class NumberLink(Problem):
 	def successor(self, state):
 		successors = []
 		currentLetter = state[0][0][0]
-		if(possible(state[1],self.start,self.end,list(state[0][0]),currentLetter)):
+		if(possible(state[1],self.start,self.end,list(state[0][0]),currentLetter,state[0][1])):
 						grid = tupleToList(state[1])
 						currentStartPoint = state[0][1]
 						for elem in self.end:
@@ -53,7 +53,7 @@ class NumberLink(Problem):
 								nextcol = currentStartPoint[1]+diir[0]
 								if(pathExists(grid,[nextline,nextcol],currentEndPoint) and grid[nextline][nextcol]=='.'):
 										grid[nextline][nextcol] = currentLetter
-										if(possible(grid,self.start,self.end,list(choice[0]),currentLetter) and possible2(grid,(nextline,nextcol),self.end,self.start,list(choice[0]))):
+										if(possible(grid,self.start,self.end,list(choice[0]),currentLetter,(nextline,nextcol))):
 											nextState = ((choice[0],(nextline,nextcol)),listToTuple(grid))
 											successors.append( (diir,nextState  ) )
 										grid[nextline][nextcol] = '.'
@@ -135,35 +135,8 @@ def chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,listLetter
 				endPoint = (elem[1],elem[2])
 				break		
 		return (tuple(listLetter),startPoint,endPoint)	
-			
-def numberDot(grid, col):
-		i=0
-		for e in grid:
-			if(e[col]=='.'):
-				i=i+1
-		return i
 
-def lVr(grid, currentPos,endP,startP,listL):
-		lC=currentPos[0]
-		cC=currentPos[1]
-		i=0
-		if(len(listL)>0):
-			listL.remove(listL[0])
-			for (letterS,lS,cS),(letterE,lE,cE) in zip(startP,endP) :
-				if (((cS<cC and cE>cC) or (cS>cC and cE<cC)) and (letterS in listL)):
-					i=i+1
-			return i
-		return 0
-
-def possible2(grid,currentPos,end,start,listL):
-	nDot=numberDot(grid,currentPos[1])
-	nLVR=lVr(grid,currentPos,end,start,listL)
-	if((nDot<nLVR)):
-		return False
-	else:
-		return True
-
-def possible(grid,start,end,listL,currentLetter):
+def possible(grid,start,end,listL,currentLetter,currentPos):
 		if(len(listL)!=0):
 			listL.remove(currentLetter)
 			for e in listL:
@@ -177,9 +150,37 @@ def possible(grid,start,end,listL,currentLetter):
 						break
 				if( not pathExists(grid, startP,endP)):
 					return False
+			if(isCycle(grid,currentLetter,start,end,currentPos)):
+				return False
 			return True
 			
 		return False	
+
+def isCycle(grid,currentLetter,start,end,currentPos):
+	for elem in start:
+		if elem[0] == currentLetter:
+			startP = (elem[1],elem[2])
+			break
+	for elem in end:
+		if elem[0] == currentLetter:
+			endP = (elem[1],elem[2])
+			break
+	curL=currentPos[0]
+	curC=currentPos[1]
+	count=0 
+	if curL+1<len(grid) and grid[curL+1][curC]==currentLetter and ((curL+1,curC)!=startP and (curL+1,curC)!=endP) :
+		count+=1
+	if curL>0 and grid[curL-1][curC]==currentLetter and ((curL-1,curC)!=startP and (curL-1,curC)!=endP) :
+		count+=1      
+	if curC+1<len(grid[curL]) and grid[curL][curC+1]==currentLetter and ((curL,curC+1)!=startP and (curL,curC+1)!=endP): #verifier les len
+		count+=1
+	if curC>0 and grid[curL][curC-1]==currentLetter and ((curL,curC-1)!=startP and (curL,curC-1)!=endP):
+		count+=1
+       
+	if count>=2:	
+		return True
+	else:
+		return False
 
 def pathExists(grid, start, end):
 	visited = [ [0 for j in range(0, len(grid[0]))] for i in range(0, len(grid)) ]
@@ -211,7 +212,7 @@ def printState(state):
 #####################
 # Launch the search #
 #####################
-
+start_time = time.time()  
 problem=NumberLink(sys.argv[1])
 
 #example of bfs search
@@ -222,3 +223,8 @@ path.reverse()
 for n in path:
 	printState(n.state) #assuming that the __str__ function of states output the correct format
 
+
+
+
+interval = time.time() - start_time  
+print('Total time in seconds:', interval )

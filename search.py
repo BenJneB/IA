@@ -85,7 +85,7 @@ class Node:
 	def expand(self, problem):
 		"Yield the nodes reachable from this node. [Fig. 3.8]"
 		for (act,next) in problem.successor(self.state):
-			print('currentLetter=',next[0][0][0])
+			#print('currentLetter=',next[0][0][0])
 			#print('expand_nextOne=')
 			#printState(next)
 			yield Node(next, self, act, problem.path_cost(self.path_cost, self.state, act, next))
@@ -128,12 +128,12 @@ def graph_search(problem, fringe):
 	fringe.append(Node(problem.initial))
 	i=0 #ATTENTIONNNNNNNNNNNN ENLEVER!!!!!!!!!!!!!!!!!!
 	while fringe:
-		print("whiluuuu----------------------------------------------------",i)
+		print("whil",i)
 		node = fringe.pop()
-		print('search_pop_state=')
-		printState(node.state)
+		#print('search_pop_state=')
+		#printState(node.state)
 		if problem.goal_test(node.state): 
-			print('search_goal_test=',node.state)
+			#print('search_goal_test=',node.state)
 			return node
 		if node.state not in closed:
 			closed[node.state] = True
