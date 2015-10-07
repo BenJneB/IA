@@ -9,85 +9,85 @@ from search import *
 #################
 
 class NumberLink(Problem):
-        def __init__(self, init):
-                self.letter=[]
-                self.end=[]
-                self.start=[]
-                self.parent=[]
-                self.createMap(init)
-                self.n=len(self.letter)
-                pass
+	def __init__(self, init):
+		self.letter=[]
+		self.end=[]
+		self.start=[]
+		self.parent=[]
+		self.createMap(init)
+		self.n=len(self.letter)
+		pass
 	
-        def goal_test(self, state):
-                n=self.n
-                i=0
-                maap=state[1]
-                for (letter,ligne,col) in self.end:
-                        for diir in directions:
-                                newL=ligne+diir[1]
-                                newC=col+diir[0]
-                                if(inBounds(maap,[newL,newC])):
-                                        if (maap[newL][newC]==letter):
-                                                i=i+1
-                                                break
-                if(i==n):                        
-                        return True
-                else:
-                        return False
+	def goal_test(self, state):
+		n=self.n
+		i=0
+		maap=state[1]
+		for (letter,ligne,col) in self.end:
+			for diir in directions:
+				newL=ligne+diir[1]
+				newC=col+diir[0]
+				if(inBounds(maap,[newL,newC])):
+					if (maap[newL][newC]==letter):
+						i=i+1
+						break
+		if(i==n):                        
+			return True
+		else:
+			return False
     
-        def successor(self, state):
-                successors = []
-                currentLetter = self.letter[0]
-                grid = tupleToList(state[1])
-                currentPoint = state[0]
-                for elem in self.end:
-                        if elem[0] == currentLetter:
-                                endPoint = (elem[1],elem[2]) 
-                if(checkEnd(currentPoint,endPoint)):
-                        #self.letter.remove(currentLetter) ERREUR sur cette ligne, faut pas qu'elle fasse ça là!!!!
-                        return ()
-                for diir in directions:
-                        nextline = currentPoint[0]+diir[1]
-                        nextcol = currentPoint[1]+diir[0]
-                        if(pathExists(grid,[nextline,nextcol],endPoint) and grid[nextline][nextcol]=='.'):
-                                grid[nextline][nextcol] = currentLetter
-                                nextState = ((nextline,nextcol),listToTuple(grid))
-                                successors.append( (diir,nextState  ) )
-                                grid[nextline][nextcol] = '.'
-                                #self.parent=listToTuple(grid)
-                return tuple(successors) 
+	def successor(self, state):
+		successors = []
+		currentLetter = self.letter[0]
+		grid = tupleToList(state[1])
+		currentPoint = state[0]
+		for elem in self.end:
+			if elem[0] == currentLetter:
+				endPoint = (elem[1],elem[2]) 
+		if(checkEnd(currentPoint,endPoint)):
+			#self.letter.remove(currentLetter) ERREUR sur cette ligne, faut pas qu'elle fasse ça là!!!!
+			return ()
+		for diir in directions:
+			nextline = currentPoint[0]+diir[1]
+			nextcol = currentPoint[1]+diir[0]
+			if(pathExists(grid,[nextline,nextcol],endPoint) and grid[nextline][nextcol]=='.'):
+				grid[nextline][nextcol] = currentLetter
+				nextState = ((nextline,nextcol),listToTuple(grid))
+				successors.append( (diir,nextState  ) )
+				grid[nextline][nextcol] = '.'
+				#self.parent=listToTuple(grid)
+		return tuple(successors) 
 
-        def createMap(self,path):
-                mapL=[]
-                endLetter=[]
-                letter=[]
-                startLetter=[]
-                f=open(path,'r')
-                ligne=0
-                for line in f:
-                        mapL2=[]
-                        colonne=0
-                        for col in line:
-                                if(col!= '\n'):
-                                        mapL2.append(col)
-                                if(col!='.' and col!='\n'):
-                                        if col in letter:
-                                                endLetter.append((col,ligne,colonne))
-                                        else:
-                                                letter.append(col)
-                                                startLetter.append((col,ligne,colonne))
-                                colonne=colonne+1
-                        mapL.append(tuple(mapL2))
-                        ligne=ligne+1
-                self.end=endLetter
-                self.letter=letter
-                self.start=startLetter
-                line = startLetter[0][1]
-                col = startLetter[0][2]
-                self.initial=((line,col),tuple(mapL))
+	def createMap(self,path):
+		mapL=[]
+		endLetter=[]
+		letter=[]
+		startLetter=[]
+		f=open(path,'r')
+		ligne=0
+		for line in f:
+			mapL2=[]
+			colonne=0
+			for col in line:
+				if(col!= '\n'):
+					mapL2.append(col)
+				if(col!='.' and col!='\n'):
+					if col in letter:
+						endLetter.append((col,ligne,colonne))
+					else:
+						letter.append(col)
+						startLetter.append((col,ligne,colonne))
+				colonne=colonne+1
+			mapL.append(tuple(mapL2))
+			ligne=ligne+1
+		self.end=endLetter
+		self.letter=letter
+		self.start=startLetter
+		line = startLetter[0][1]
+		col = startLetter[0][2]
+		self.initial=((line,col),tuple(mapL))
 		#print(startLetter)
 		#print(endLetter)
-                                
+				
 
 ###################### 
 # Auxiliary function #
@@ -119,18 +119,18 @@ def pathExists(grid, start, end):
 	return ok
 
 def pathExistsDFS(grid, start, end, visited):
-        for d in directions:
-                i = start[0] + d[0]
-                j = start[1] + d[1]
-                next = [i, j]
-                if i == end[0] and j == end[1]:
-                        return True
-                if inBounds(grid, next) and grid[i][j] == '.' and not visited[i][j]:
-                        visited[i][j] = 1
-                        exists = pathExistsDFS(grid, next, end, visited)
-                        if exists:
-                                return True
-        return False
+	for d in directions:
+		i = start[0] + d[0]
+		j = start[1] + d[1]
+		next = [i, j]
+		if i == end[0] and j == end[1]:
+			return True
+		if inBounds(grid, next) and grid[i][j] == '.' and not visited[i][j]:
+			visited[i][j] = 1
+			exists = pathExistsDFS(grid, next, end, visited)
+			if exists:
+				return True
+	return False
 
 def inBounds(grid, pos):
 	return 0 <= pos[0] and pos[0] < len(grid) and 0 <= pos[1] and pos[1] < len(grid[0])
