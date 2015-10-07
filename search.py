@@ -85,9 +85,9 @@ class Node:
 	def expand(self, problem):
 		"Yield the nodes reachable from this node. [Fig. 3.8]"
 		for (act,next) in problem.successor(self.state):
-			#print('expand_act=',act)
-			#print('expand_nextOne=')
-			#printState(next)
+			print('currentLetter=',next[0][0][0])
+			print('expand_nextOne=')
+			printState(next)
 			yield Node(next, self, act, problem.path_cost(self.path_cost, self.state, act, next))
 
 
@@ -126,19 +126,19 @@ def graph_search(problem, fringe):
 	If two paths reach a state, only use the best one. [Fig. 3.18]"""
 	closed = {}
 	fringe.append(Node(problem.initial))
-	#i=0 #ATTENTIONNNNNNNNNNNN ENLEVER!!!!!!!!!!!!!!!!!!
+	i=0 #ATTENTIONNNNNNNNNNNN ENLEVER!!!!!!!!!!!!!!!!!!
 	while fringe:
-		#print("whiluuuu----------------------------------------------------",i)
+		print("whiluuuu----------------------------------------------------",i)
 		node = fringe.pop()
-		#print('search_pop_state=')
-		#printState(node.state)
+		print('search_pop_state=')
+		printState(node.state)
 		if problem.goal_test(node.state): 
-			#print('search_goal_test=',node.state)
+			print('search_goal_test=',node.state)
 			return node
 		if node.state not in closed:
 			closed[node.state] = True
 			fringe.extend(node.expand(problem))
-		#i=i+1 #ATTENTIONNNNNNNNNNNNNNNNNNNNNNNNNNNNN    
+		i=i+1 #ATTENTIONNNNNNNNNNNNNNNNNNNNNNNNNNNNN    
 	return None
 
 def breadth_first_graph_search(problem):

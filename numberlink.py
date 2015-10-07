@@ -36,8 +36,8 @@ class NumberLink(Problem):
 	
 	def successor(self, state):
 		successors = []
-		if(possible(state[1],self.letter,self.start,self.end)):
-						currentLetter = state[0][0][0]
+		currentLetter = state[0][0][0]
+		if(possible(state[1],self.start,self.end,list(state[0][0]),currentLetter)):
 						grid = tupleToList(state[1])
 						currentStartPoint = state[0][1]
 						for elem in self.end:
@@ -60,7 +60,7 @@ class NumberLink(Problem):
 										grid[nextline][nextcol] = '.'
 				#self.parent=listToTuple(grid)
 						return tuple(successors)
-				   return ()
+		return ()
 
 	def createMap(self,path):
 		mapL=[]
@@ -138,17 +138,20 @@ def chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,listLetter
 				return None	
 		return None			
 
-def possible(grid,start,end,listL)
-		for e in listL:
+def possible(grid,start,end,listL,currentLetter):
+		if(len(listL)!=0):
+			listL.remove(currentLetter)
+			for e in listL:
 				for elem in start:
-			if elem[0] == e:
-				startP = (elem[1],elem[2])
-		for elem in end:
-			if elem[0] == e:
-				endP = (elem[1],elem[2])
+					if elem[0] == e:
+						startP = (elem[1],elem[2])
+				for elem in end:
+					if elem[0] == e:
+						endP = (elem[1],elem[2])
 				if( not pathExists(grid, startP,endP)):
-						return False
-		return True
+					return False
+			return True
+		return False	
 
 def pathExists(grid, start, end):
 	visited = [ [0 for j in range(0, len(grid[0]))] for i in range(0, len(grid)) ]
