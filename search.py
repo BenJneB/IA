@@ -84,15 +84,21 @@ class Node:
 	
 	def expand(self, problem):
 		"Yield the nodes reachable from this node. [Fig. 3.8]"
-		#print((problem.successor(self.state)))
 		for (act,next) in problem.successor(self.state):
 			#print('expand_act=',act)
-			#print('expand_nextOne=',next)
+			#print('expand_nextOne=')
+			#printState(next)
 			yield Node(next, self, act, problem.path_cost(self.path_cost, self.state, act, next))
 
 
 #______________________________________________________________________________
 ## Uninformed Search algorithms
+
+def printState(state):
+        for e in state[1]:
+                line=''.join(e)
+                print(line)
+        print('\n')
 
 def tree_search(problem, fringe):
 	"""Search through the successors of a problem to find a goal.
@@ -124,7 +130,8 @@ def graph_search(problem, fringe):
 	while fringe:
 		#print("whiluuuu----------------------------------------------------",i)
 		node = fringe.pop()
-		#print('search_pop_state=',node.state)
+		#print('search_pop_state=')
+		#printState(node.state)
 		if problem.goal_test(node.state): 
 			#print('search_goal_test=',node.state)
 			return node
