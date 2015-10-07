@@ -37,7 +37,7 @@ class NumberLink(Problem):
 	def successor(self, state):
 		successors = []
 		currentLetter = state[0][0][0]
-		if(possible(state[1],self.start,self.end,list(state[0][0]),currentLetter)):
+		if(possible(state[1],self.start,self.end,list(state[0][0]),currentLetter) and possible2(state[1],state[0][1],self.end,self.start)):
 						grid = tupleToList(state[1])
 						currentStartPoint = state[0][1]
 						for elem in self.end:
@@ -53,7 +53,7 @@ class NumberLink(Problem):
 								nextcol = currentStartPoint[1]+diir[0]
 								if(pathExists(grid,[nextline,nextcol],currentEndPoint) and grid[nextline][nextcol]=='.'):
 										grid[nextline][nextcol] = currentLetter
-										if(possible(grid,self.start,self.end,list(choice[0]),currentLetter)):
+										if(possible(grid,self.start,self.end,list(choice[0]),currentLetter) and possible2(grid,(nextline,nextcol),self.end,self.start)):
 											nextState = ((choice[0],(nextline,nextcol)),listToTuple(grid))
 											successors.append( (diir,nextState  ) )
 										grid[nextline][nextcol] = '.'
@@ -93,7 +93,8 @@ class NumberLink(Problem):
 		f.close
 		#print(startLetter)
 		#print(endLetter)
-				
+
+
 
 ###################### 
 # Auxiliary function #
@@ -135,6 +136,28 @@ def chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,listLetter
 				break		
 		return (tuple(listLetter),startPoint,endPoint)	
 			
+def numberDot(grid, col):
+		i=0
+		for e in grid:
+			if(e[col]=='.'):
+				i=i+1
+		return i
+
+def lVr(grid, currentPos,endP,startP):
+		lC=currentPos[0]
+		cC=currentPos[1]
+		i=0
+		for (letterS,lS,cS),(letterE,lE,cE) in zip(startP,endP) :
+			if ((cS<cC and cE>cC) or (cS>cC and cE<cC)):
+				i=i+1
+		return i
+
+def possible2(grid,currentPos,end,start):
+	nDot=numberDot(grid,currentPos[1])
+	nLVR=lVr(grid,currentPos,end,start)
+	if(nDot<nLVR):
+		return False
+	return True
 
 def possible(grid,start,end,listL,currentLetter):
 		if(len(listL)!=0):
@@ -151,6 +174,7 @@ def possible(grid,start,end,listL,currentLetter):
 				if( not pathExists(grid, startP,endP)):
 					return False
 			return True
+			
 		return False	
 
 def pathExists(grid, start, end):
