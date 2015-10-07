@@ -178,7 +178,7 @@ def printState(state):
 	for e in state[1]:
 		line=''.join(e)
 		print(line)
-	print('\n')
+	print("")
 #####################
 # Launch the search #
 #####################
@@ -198,6 +198,6 @@ for n in path:
 		line=''.join(e)
 		f.write(line)
 		f.write('\n')
-	f.write('\n')
+	f.write("")
 	printState(n.state) #assuming that the __str__ function of states output the correct format
 
