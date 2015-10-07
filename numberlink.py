@@ -44,7 +44,7 @@ class NumberLink(Problem):
                         if elem[0] == currentLetter:
                                 endPoint = (elem[1],elem[2]) 
                 if(checkEnd(currentPoint,endPoint)):
-                        #self.letter.remove(currentLetter)
+                        #self.letter.remove(currentLetter) ERREUR sur cette ligne, faut pas qu'elle fasse ça là!!!!
                         return ()
                 for diir in directions:
                         nextline = currentPoint[0]+diir[1]
