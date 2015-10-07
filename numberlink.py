@@ -154,6 +154,11 @@ def pathExistsDFS(grid, start, end, visited):
 def inBounds(grid, pos):
 	return 0 <= pos[0] and pos[0] < len(grid) and 0 <= pos[1] and pos[1] < len(grid[0])
 
+def printState(state):
+        for e in state[1]:
+                line=''.join(e)
+                print(line)
+        print('\n')
 #####################
 # Launch the search #
 #####################
@@ -164,8 +169,9 @@ problem=NumberLink(sys.argv[1])
 #example of bfs search
 node=depth_first_graph_search(problem)
 #example of print
-#path=node.path()
-#path.reverse()
-#for n in path:
-#        print(n.state) #assuming that the __str__ function of states output the correct format
+path=node.path()
+path.reverse()
+print(path)
+for n in path:
+        printState(n.state) #assuming that the __str__ function of states output the correct format
 
