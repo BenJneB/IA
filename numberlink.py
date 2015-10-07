@@ -36,17 +36,17 @@ class NumberLink(Problem):
     
 	def successor(self, state):
 		successors = []
-		currentLetter = state[0][0]
+		currentLetter = state[0][0][0]
 		grid = tupleToList(state[1])
 		currentStartPoint = state[0][1]
 		for elem in self.end:
 			if elem[0] == currentLetter:
 				currentEndPoint = (elem[1],elem[2]) 		
-		choice = chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,self.letter,self.start,self.end)			
+		choice = chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,state[0][0],self.start,self.end)			
 		if (choice==None):
 			return ()
 		else:
-			currentLetter = choice[0]
+			currentLetter = choice[0][0]
 			currentStartPoint = choice[1]
 			currentEndPoint = choice[2]		
 		for diir in directions:
@@ -54,7 +54,7 @@ class NumberLink(Problem):
 			nextcol = currentStartPoint[1]+diir[0]
 			if(pathExists(grid,[nextline,nextcol],currentEndPoint) and grid[nextline][nextcol]=='.'):
 				grid[nextline][nextcol] = currentLetter
-				nextState = ((currentLetter,(nextline,nextcol)),listToTuple(grid))
+				nextState = ((choice[0],(nextline,nextcol)),listToTuple(grid))
 				successors.append( (diir,nextState  ) )
 				grid[nextline][nextcol] = '.'
 				#self.parent=listToTuple(grid)
@@ -87,7 +87,7 @@ class NumberLink(Problem):
 		self.start=startLetter
 		line = startLetter[0][1]
 		col = startLetter[0][2]
-		self.initial=((letter[0],(line,col)),tuple(mapL))
+		self.initial=((tuple(letter),(line,col)),tuple(mapL))
 		f.close
 		#print(startLetter)
 		#print(endLetter)
@@ -119,18 +119,21 @@ def checkEnd(currentPoint,endPoint):
 
 def chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,listLetter,listStartPoint,listEndPoint):	
 	if (pathExists(grid, currentStartPoint, currentEndPoint) and not checkEnd(currentStartPoint,currentEndPoint)):
-		return (currentLetter,currentStartPoint,currentEndPoint)		 
+		return (tuple(listLetter),currentStartPoint,currentEndPoint)		 
 	else:
-		for letter in listLetter:
-                        if(letter!=currentLetter):
-                                for elem in listStartPoint:
-                                        if elem[0] == letter:
-                                                startPoint = (elem[1],elem[2])
-                                for elem in listEndPoint:
-                                        if elem[0] == letter:
-                                                endPoint = (elem[1],elem[2])		
-                                if (pathExists(grid, startPoint, endPoint) and not checkEnd(startPoint,endPoint)):
-                                        return (letter,startPoint,endPoint)
+		if((len(listLetter) != 0)):
+			listLetter = list(listLetter)
+			listLetter.remove(currentLetter)
+			for elem in listStartPoint:
+				if elem[0] == listLetter[0]:
+					startPoint = (elem[1],elem[2])
+			for elem in listEndPoint:
+				if elem[0] == listLetter[0]:
+					endPoint = (elem[1],elem[2])		
+			if (pathExists(grid, startPoint, endPoint)):
+				return (tuple(listLetter),startPoint,endPoint)
+			else:
+				return None	
 		return None			
 
 
@@ -157,10 +160,10 @@ def inBounds(grid, pos):
 	return 0 <= pos[0] and pos[0] < len(grid) and 0 <= pos[1] and pos[1] < len(grid[0])
 
 def printState(state):
-        for e in state[1]:
-                line=''.join(e)
-                print(line)
-        print('\n')
+	for e in state[1]:
+		line=''.join(e)
+		print(line)
+	print('\n')
 #####################
 # Launch the search #
 #####################
@@ -176,10 +179,10 @@ path.reverse()
 f=open("solve.txt",'w')
 for n in path:
 
-        for e in n.state[1]:
-                line=''.join(e)
-                f.write(line)
-                f.write('\n')
-        f.write('\n')
-        printState(n.state) #assuming that the __str__ function of states output the correct format
+	for e in n.state[1]:
+		line=''.join(e)
+		f.write(line)
+		f.write('\n')
+	f.write('\n')
+	printState(n.state) #assuming that the __str__ function of states output the correct format
 
