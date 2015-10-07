@@ -36,29 +36,31 @@ class NumberLink(Problem):
     
 	def successor(self, state):
 		successors = []
-		currentLetter = state[0][0][0]
-		grid = tupleToList(state[1])
-		currentStartPoint = state[0][1]
-		for elem in self.end:
-			if elem[0] == currentLetter:
-				currentEndPoint = (elem[1],elem[2]) 		
-		choice = chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,state[0][0],self.start,self.end)			
-		if (choice==None):
-			return ()
-		else:
-			currentLetter = choice[0][0]
-			currentStartPoint = choice[1]
-			currentEndPoint = choice[2]		
-		for diir in directions:
-			nextline = currentStartPoint[0]+diir[1]
-			nextcol = currentStartPoint[1]+diir[0]
-			if(pathExists(grid,[nextline,nextcol],currentEndPoint) and grid[nextline][nextcol]=='.'):
-				grid[nextline][nextcol] = currentLetter
-				nextState = ((choice[0],(nextline,nextcol)),listToTuple(grid))
-				successors.append( (diir,nextState  ) )
-				grid[nextline][nextcol] = '.'
+		if(possible(state[1],self.letter,self.start,self.end)):
+                        currentLetter = state[0][0][0]
+                        grid = tupleToList(state[1])
+                        currentStartPoint = state[0][1]
+                        for elem in self.end:
+                                if elem[0] == currentLetter:
+                                        currentEndPoint = (elem[1],elem[2]) 		
+                        choice = chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,state[0][0],self.start,self.end)			
+                        if (choice==None):
+                                return ()
+                        else:
+                                currentLetter = choice[0][0]
+                                currentStartPoint = choice[1]
+                                currentEndPoint = choice[2]		
+                        for diir in directions:
+                                nextline = currentStartPoint[0]+diir[1]
+                                nextcol = currentStartPoint[1]+diir[0]
+                                if(pathExists(grid,[nextline,nextcol],currentEndPoint) and grid[nextline][nextcol]=='.'):
+                                        grid[nextline][nextcol] = currentLetter
+                                        nextState = ((choice[0],(nextline,nextcol)),listToTuple(grid))
+                                        successors.append( (diir,nextState  ) )
+                                        grid[nextline][nextcol] = '.'
 				#self.parent=listToTuple(grid)
-		return tuple(successors) 
+                        return tuple(successors)
+                   return ()
 
 	def createMap(self,path):
 		mapL=[]
@@ -136,6 +138,17 @@ def chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,listLetter
 				return None	
 		return None			
 
+def possible(grid,start,end,listL)
+        for e in listL:
+                for elem in start:
+			if elem[0] == e:
+				startP = (elem[1],elem[2])
+		for elem in end:
+			if elem[0] == e:
+				endP = (elem[1],elem[2])
+                if( not pathExists(grid, startP,endP)):
+                        return False
+        return True
 
 def pathExists(grid, start, end):
 	visited = [ [0 for j in range(0, len(grid[0]))] for i in range(0, len(grid)) ]
