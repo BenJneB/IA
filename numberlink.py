@@ -42,7 +42,8 @@ class NumberLink(Problem):
 						currentStartPoint = state[0][1]
 						for elem in self.end:
 								if elem[0] == currentLetter:
-										currentEndPoint = (elem[1],elem[2]) 		
+										currentEndPoint = (elem[1],elem[2])
+										break 		
 						choice = chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,state[0][0],self.start,self.end)			
 						currentLetter = choice[0][0]
 						currentStartPoint = choice[1]
@@ -183,7 +184,6 @@ def printState(state):
 # Launch the search #
 #####################
 
-
 problem=NumberLink(sys.argv[1])
 
 #example of bfs search
@@ -191,13 +191,6 @@ node=depth_first_graph_search(problem)
 #example of print
 path=node.path()
 path.reverse()
-f=open("solve.txt",'w')
 for n in path:
-
-	for e in n.state[1]:
-		line=''.join(e)
-		f.write(line)
-		f.write('\n')
-	f.write("")
 	printState(n.state) #assuming that the __str__ function of states output the correct format
 
