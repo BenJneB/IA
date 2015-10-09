@@ -39,7 +39,6 @@ class NumberLink(Problem):
 		currentLetter = state[0][0][0]
 		currentStartPoint = state[0][1]
 		grid = tupleToList(state[1])
-
 		for elem in self.end:
 			if elem[0] == currentLetter:
 				currentEndPoint = (elem[1],elem[2])
@@ -135,33 +134,26 @@ def chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,listLetter
 		return (tuple(listLetter),startPoint,endPoint)	
 
 def possible(grid,start,end,listL,currentLetter,currentPos):
-	if(len(listL)!=0):
-		listL.remove(currentLetter)
-		for letter in listL:
-			for elem in start:
-				if elem[0] == letter:
-					startP = (elem[1],elem[2])
-					break
-			for elem in end:
-				if elem[0] == letter:
-					endP = (elem[1],elem[2])
-					break
+	for letter in listL:
+		for elem in start:
+			if elem[0] == letter:
+				startP = (elem[1],elem[2])
+				break
+		for elem in end:
+			if elem[0] == letter:
+				endP = (elem[1],elem[2])
+				break
+		if(letter != currentLetter):		
 			if( not pathExists(grid, startP,endP)):
 				return False
-		if(isCycle(grid,currentLetter,start,end,currentPos)):
-			return False
-		return True
-	return False	
+		else:
+			currentStartPoint = startP
+			currentEndPoint = endP
+	if(isCycle(grid,currentLetter,currentStartPoint,currentEndPoint,currentPos)):
+		return False
+	return True	
 
-def isCycle(grid,currentLetter,start,end,currentPos):
-	for elem in start:
-		if elem[0] == currentLetter:
-			startP = (elem[1],elem[2])
-			break
-	for elem in end:
-		if elem[0] == currentLetter:
-			endP = (elem[1],elem[2])
-			break
+def isCycle(grid,currentLetter,startP,endP,currentPos):
 	curL=currentPos[0]
 	curC=currentPos[1]
 	count=0 
