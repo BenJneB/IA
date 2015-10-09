@@ -10,12 +10,11 @@ from search import *
 
 class NumberLink(Problem):
 	def __init__(self, init):
-		self.letter=[]
-		self.end=[]
-		self.start=[]
-		self.parent=[]
+		self.letter=[] #list of all different letters into the grid
+		self.end=[] #list of cooordinates of all ending letters
+		self.start=[] #list of coordinates of all starting letters
 		self.createMap(init)
-		self.n=len(self.letter)
+		self.n=len(self.letter) # number of different letters into the grid
 		pass
 	
 	def goal_test(self, state):
@@ -34,33 +33,31 @@ class NumberLink(Problem):
 		else:
 			return False
 	
-	def successor(self, state):
+	def successor(self, state): #state = (  ( (currentLisLetter),(currentPointLine,currentPointCol) ),(grid)  )
 		successors = []
+		currentListLetter = state[0][0]
 		currentLetter = state[0][0][0]
-		if(possible(state[1],self.start,self.end,list(state[0][0]),currentLetter,state[0][1])):
-						grid = tupleToList(state[1])
-						currentStartPoint = state[0][1]
-						for elem in self.end:
-								if elem[0] == currentLetter:
-										currentEndPoint = (elem[1],elem[2])
-										break 		
-						choice = chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,state[0][0],self.start,self.end)			
-						currentLetter = choice[0][0]
-						currentStartPoint = choice[1]
-						currentEndPoint = choice[2]		
-						for diir in directions:
-								nextline = currentStartPoint[0]+diir[1]
-								nextcol = currentStartPoint[1]+diir[0]
-								if(pathExists(grid,[nextline,nextcol],currentEndPoint) and grid[nextline][nextcol]=='.'):
-										grid[nextline][nextcol] = currentLetter
-										if(possible(grid,self.start,self.end,list(choice[0]),currentLetter,(nextline,nextcol))):
-											nextState = ((choice[0],(nextline,nextcol)),listToTuple(grid))
-											successors.append( (diir,nextState  ) )
-										grid[nextline][nextcol] = '.'
-				#self.parent=listToTuple(grid)
-						return tuple(successors)
-		print("None")				
-		return ()
+		currentStartPoint = state[0][1]
+		grid = tupleToList(state[1])
+		for elem in self.end:
+			if elem[0] == currentLetter:
+				currentEndPoint = (elem[1],elem[2])
+				break 		
+		choice = chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,currentListLetter,self.start,self.end)
+		currentListLetter = choice[0] #ChooseLetter check if we need to change the current letter or not.			
+		currentLetter = choice[0][0]  
+		currentStartPoint = choice[1]
+		currentEndPoint = choice[2]		
+		for diir in directions:
+			nextline = currentStartPoint[0]+diir[1]
+			nextcol = currentStartPoint[1]+diir[0]
+			if(pathExists(grid,[nextline,nextcol],currentEndPoint) and grid[nextline][nextcol]=='.'):
+				grid[nextline][nextcol] = currentLetter
+				if(possible(grid,self.start,self.end,list(currentListLetter),currentLetter,(nextline,nextcol))):
+					nextState = ((currentListLetter,(nextline,nextcol)),listToTuple(grid))
+					successors.append( (diir,nextState  ) )
+				grid[nextline][nextcol] = '.'
+		return tuple(successors)
 
 	def createMap(self,path):
 		mapL=[]
@@ -137,51 +134,42 @@ def chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,listLetter
 		return (tuple(listLetter),startPoint,endPoint)	
 
 def possible(grid,start,end,listL,currentLetter,currentPos):
-		if(len(listL)!=0):
-			listL.remove(currentLetter)
-			for e in listL:
-				for elem in start:
-					if elem[0] == e:
-						startP = (elem[1],elem[2])
-						break
-				for elem in end:
-					if elem[0] == e:
-						endP = (elem[1],elem[2])
-						break
-				if( not pathExists(grid, startP,endP)):
-					return False
-			if(isCycle(grid,currentLetter,start,end,currentPos)):
-				return False
-			return True
-			
-		return False	
-
-def isCycle(grid,currentLetter,start,end,currentPos):
-	curL=currentPos[0]
-	curC=currentPos[1]
-	if(curL+1<len(grid) and curL-1>=0 and curC-1 >=0 and curC+1<len(grid[0])):
+	for letter in listL:
 		for elem in start:
-			if elem[0] == currentLetter:
+			if elem[0] == letter:
 				startP = (elem[1],elem[2])
 				break
 		for elem in end:
-			if elem[0] == currentLetter:
+			if elem[0] == letter:
 				endP = (elem[1],elem[2])
 				break
-		count=0 
-		if grid[curL+1][curC]==currentLetter and ((curL+1,curC)!=startP and (curL+1,curC)!=endP) :
-			count+=1
-		if grid[curL-1][curC]==currentLetter and ((curL-1,curC)!=startP and (curL-1,curC)!=endP) :
-			count+=1      
-		if grid[curL][curC+1]==currentLetter and ((curL,curC+1)!=startP and (curL,curC+1)!=endP): #verifier les len
-			count+=1
-		if grid[curL][curC-1]==currentLetter and ((curL,curC-1)!=startP and (curL,curC-1)!=endP):
-			count+=1
-       
-		if count>=2:	
-			return True
+		if(letter != currentLetter):		
+			if( not pathExists(grid, startP,endP)):
+				return False
 		else:
-			return False
+			currentStartPoint = startP
+			currentEndPoint = endP
+	if(isCycle(grid,currentLetter,currentStartPoint,currentEndPoint,currentPos)):
+		return False
+	return True	
+
+def isCycle(grid,currentLetter,startP,endP,currentPos):
+	curL=currentPos[0]
+	curC=currentPos[1]
+	count=0 
+	if curL+1<len(grid) and grid[curL+1][curC]==currentLetter and ((curL+1,curC)!=startP and (curL+1,curC)!=endP) :
+		count+=1
+	if curL>0 and grid[curL-1][curC]==currentLetter and ((curL-1,curC)!=startP and (curL-1,curC)!=endP) :
+		count+=1      
+	if curC+1<len(grid[curL]) and grid[curL][curC+1]==currentLetter and ((curL,curC+1)!=startP and (curL,curC+1)!=endP): 
+		count+=1
+	if curC>0 and grid[curL][curC-1]==currentLetter and ((curL,curC-1)!=startP and (curL,curC-1)!=endP):
+		count+=1
+       
+	if count>=2:	
+		return True
+	else:
+		return False
 
 def pathExists(grid, start, end):
 	visited = [ [0 for j in range(0, len(grid[0]))] for i in range(0, len(grid)) ]
@@ -217,15 +205,13 @@ start_time = time.time()
 problem=NumberLink(sys.argv[1])
 
 #example of bfs search
-node=depth_first_graph_search(problem)
+node=breadth_first_graph_search(problem)
+#node=depth_first_graph_search(problem)
 #example of print
 path=node.path()
 path.reverse()
 for n in path:
 	printState(n.state) #assuming that the __str__ function of states output the correct format
-
-
-
 
 interval = time.time() - start_time  
 print('Total time in seconds:', interval )
