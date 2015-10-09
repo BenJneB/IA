@@ -39,28 +39,26 @@ class NumberLink(Problem):
 		currentLetter = state[0][0][0]
 		currentStartPoint = state[0][1]
 		grid = tupleToList(state[1])
-		if(possible(grid,self.start,self.end,list(currentListLetter),currentLetter,currentStartPoint)):#je crois que cette condition est inutile.
-			for elem in self.end:
-				if elem[0] == currentLetter:
-					currentEndPoint = (elem[1],elem[2])
-					break 		
-			choice = chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,currentListLetter,self.start,self.end)
-			currentListLetter = choice[0] #ChooseLetter check if we need to change letter or not.			
-			currentLetter = choice[0][0]  
-			currentStartPoint = choice[1]
-			currentEndPoint = choice[2]		
-			for diir in directions:
-				nextline = currentStartPoint[0]+diir[1]
-				nextcol = currentStartPoint[1]+diir[0]
-				if(pathExists(grid,[nextline,nextcol],currentEndPoint) and grid[nextline][nextcol]=='.'):
-					grid[nextline][nextcol] = currentLetter
-					if(possible(grid,self.start,self.end,list(currentListLetter),currentLetter,(nextline,nextcol))):
-						nextState = ((currentListLetter,(nextline,nextcol)),listToTuple(grid))
-						successors.append( (diir,nextState  ) )
-					grid[nextline][nextcol] = '.'
-			return tuple(successors)
-		#print("None")				
-		return ()
+
+		for elem in self.end:
+			if elem[0] == currentLetter:
+				currentEndPoint = (elem[1],elem[2])
+				break 		
+		choice = chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,currentListLetter,self.start,self.end)
+		currentListLetter = choice[0] #ChooseLetter check if we need to change letter or not.			
+		currentLetter = choice[0][0]  
+		currentStartPoint = choice[1]
+		currentEndPoint = choice[2]		
+		for diir in directions:
+			nextline = currentStartPoint[0]+diir[1]
+			nextcol = currentStartPoint[1]+diir[0]
+			if(pathExists(grid,[nextline,nextcol],currentEndPoint) and grid[nextline][nextcol]=='.'):
+				grid[nextline][nextcol] = currentLetter
+				if(possible(grid,self.start,self.end,list(currentListLetter),currentLetter,(nextline,nextcol))):
+					nextState = ((currentListLetter,(nextline,nextcol)),listToTuple(grid))
+					successors.append( (diir,nextState  ) )
+				grid[nextline][nextcol] = '.'
+		return tuple(successors)
 
 	def createMap(self,path):
 		mapL=[]
