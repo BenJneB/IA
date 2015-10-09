@@ -128,7 +128,6 @@ def graph_search(problem, fringe):
 	fringe.append(Node(problem.initial))
 	i=0 #ATTENTIONNNNNNNNNNNN ENLEVER!!!!!!!!!!!!!!!!!!
 	while fringe:
-		print("whil",i)
 		node = fringe.pop()
 		#print('search_pop_state=')
 		#printState(node.state)
