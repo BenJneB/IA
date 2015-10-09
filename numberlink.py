@@ -44,7 +44,7 @@ class NumberLink(Problem):
 				currentEndPoint = (elem[1],elem[2])
 				break 		
 		choice = chooseLetter(grid,currentLetter,currentStartPoint,currentEndPoint,currentListLetter,self.start,self.end)
-		currentListLetter = choice[0] #ChooseLetter check if we need to change letter or not.			
+		currentListLetter = choice[0] #ChooseLetter check if we need to change the current letter or not.			
 		currentLetter = choice[0][0]  
 		currentStartPoint = choice[1]
 		currentEndPoint = choice[2]		
@@ -212,9 +212,6 @@ path=node.path()
 path.reverse()
 for n in path:
 	printState(n.state) #assuming that the __str__ function of states output the correct format
-
-
-
 
 interval = time.time() - start_time  
 print('Total time in seconds:', interval )
